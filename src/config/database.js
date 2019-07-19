@@ -1,10 +1,10 @@
 module.exports = {
   dialect: 'postgres',
-  host: 'localhost',
+  host: process.env.DC_DB_HOST || 'localhost',
   username: 'postgres',
   password: 'docker',
   database: 'meetapp',
-  port: 5434,
+  port: 5432,
   define: {
     timestamps: true,
     underscored: true,
