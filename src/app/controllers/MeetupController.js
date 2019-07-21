@@ -19,9 +19,12 @@ class MeetupController {
     if (isBefore(parseISO(date_time), new Date()))
       return res.status(400).json({ error: 'Past dates are not permitted' });
 
-    const meetup = await Meetup.create({ ...req.body, user_id: req.userId });
+    const { titulo, descricao, localizacao, past, date } = await Meetup.create({
+      ...req.body,
+      user_id: req.userId,
+    });
 
-    return res.status(200).json(meetup);
+    return res.status(200).json({ titulo, descricao, localizacao, past, date });
   };
 
   update = async (req, res) => {
