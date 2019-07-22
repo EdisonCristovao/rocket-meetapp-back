@@ -14,23 +14,23 @@ services:
     networks:
       - webnet
   #mongo:
-   # image: mongo
-   # ports:
-   #   - 27017:27017
-    # volumes:
-    #   - mongo-data:/var/lib/mongo/data
+  # image: mongo
+  # ports:
+  #   - 27017:27017
+  # volumes:
+  #   - mongo-data:/var/lib/mongo/data
   #  networks:
   #    - webnet
-  #redis:
-   # image: redis:alpine
-   # networks:
-   #   - webnet
+  redis:
+    image: redis:alpine
+    networks:
+      - webnet
   api:
     image: node:12.6
     volumes:
       - .:/app
     working_dir: '/app'
-    command: bash -c "yarn install && sleep 30 && yarn sequelize db:migrate && yarn dev"
+    command: bash -c "yarn install && sleep 30 && yarn sequelize db:migrate && yarn queue& yarn dev"
     ports:
       - 3333:3333
     environment:
@@ -41,8 +41,8 @@ services:
       - webnet
     depends_on:
       - db
+      - redis
     #  - mongo
-    #  - redis
     # links:
     #  - mongo
 networks:
