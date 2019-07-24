@@ -10,8 +10,6 @@ class CancellationMail {
   async handle({ data }) {
     const { meetup, user } = data;
 
-    console.log(meetup.date_time, '<-------_<<<<<');
-
     await Mail.sendEmail({
       to: `${meetup.user.name} <${meetup.user.email}>`,
       subject: `Nova inscrição em ${meetup.titulo}`,

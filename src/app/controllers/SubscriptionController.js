@@ -1,15 +1,19 @@
 import * as _ from 'lodash';
+import { Op } from 'sequelize';
 
 import Subscription from '../models/Subscription';
 import Meetup from '../models/Meetup';
 import User from '../models/User';
-
-import InfoSubscriptionMail from '../jobs/InforSubscriptionMail';
-import Queue from '../../lib/Queue';
-import { format } from 'date-fns';
-import pt from 'date-fns/locale/pt';
-
 class SubscriptionController {
+  index = async (req, res) => {
+    const meetups = await Meetup.findAll({
+      where: { user_id: req.userId, date_time: { [Op.gte]: new Date() } },
+      order: [['date_time', 'DESC']],
+    });
+
+    return res.status(200).json(meetups);
+  };
+
   store = async (req, res) => {
     const { meetup_id } = req.body;
 
@@ -67,8 +71,6 @@ class SubscriptionController {
       meetup_id,
       user_id: req.userId,
     });
-
-    console.log(await Queue.add(InfoSubscriptionMail.key, { meetup, user }));
 
     return res.status(200).json(subscription);
   };
